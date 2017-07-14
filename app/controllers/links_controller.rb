@@ -6,6 +6,9 @@ class LinksController < ApplicationController
 skip_before_action :verify_authenticity_token, only: [:get_link, :shorten_link]
 
 	def get_link
+		input_link = params[:given_link]
+		@output = 0
+		@short_link = shorten_link_html(input_link)
 	end
 
 	#method to shorten the link passed
@@ -37,8 +40,11 @@ skip_before_action :verify_authenticity_token, only: [:get_link, :shorten_link]
 	    	json = {"success": true, "given_link": ip_link, "shortened_link": find_link.shortened_link}
 	    else
 	    	short_link = "http://localhost:3000/"+Link.shorten
+	    	given_link = ip_link
+	    	shortened_link = short_link
 	    	@link = Link.new(link_params)
 	    	@link.shortened_link = short_link
+
 	    	if @link.save
 	    		json = {"success": true, "given_link": ip_link, "shortened_link": short_link}
 	    	else
@@ -47,4 +53,26 @@ skip_before_action :verify_authenticity_token, only: [:get_link, :shorten_link]
 	    end
 	    json
 	end
+
+	def shorten_link_html(ip_link)
+	    find_link = Link.find_by(given_link: ip_link)
+	    if find_link
+	    	@message = "The shortened link previously created is #{find_link.shortened_link}"
+	    else
+	    	short_link = "http://localhost:3000/"+Link.shorten
+	    	given_link = ip_link
+	    	shortened_link = short_link
+	    	@link = Link.new
+	    	@link.shortened_link = short_link
+	    	@link.given_link =ip_link
+
+	    	if @link.save
+	    		@message = "Shortened link for #{@link.given_link} is #{@link.shortened_link}"
+	    	else
+	    		@mesage = "Please try again"
+	    	end	
+	    end
+	    @message
+	end
+
 end
