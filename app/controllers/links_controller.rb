@@ -7,8 +7,9 @@ skip_before_action :verify_authenticity_token, only: [:get_link, :shorten_link]
 
 	def get_link
 		input_link = params[:given_link]
-		@output = 0
-		@short_link = shorten_link_html(input_link)
+		if input_link
+			@short_link = shorten_link_html(input_link)
+		end
 	end
 
 	#method to shorten the link passed
@@ -67,7 +68,6 @@ skip_before_action :verify_authenticity_token, only: [:get_link, :shorten_link]
 	    	@link.given_link =ip_link
 
 	    	if @link.save
-	    		@message = "Shortened link for #{@link.given_link} is #{@link.shortened_link}"
 	    	else
 	    		@mesage = "Please try again"
 	    	end	

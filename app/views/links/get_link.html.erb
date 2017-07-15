@@ -1,8 +1,8 @@
-<h1>Shorten your Url Here!</h1>
-<br>
-<form>
-  <div class="container">
+<div class="container">
+  <h1>Shorten your Url Here!</h1>
+  <form>
     <div class="form-group row">
+
       <div class="col-md-6 offset-md-3" action="/">
         <input class="form-control" type="text" placeholder="Name" name="name-input">
       </div>
@@ -18,9 +18,16 @@
         <button type="submit" class="form-control btn btn-primary">Submit</button>
       </div>
     </div>
-  </div>
-</form>
+  </form>
+  <h4>
+  <%if @message%>
+    <%= @message %>
+  <%elsif @link%>
+    Shortened link for <%=@link.given_link%> is <a href=<%=@link.shortened_link%>><%=@link.shortened_link%></a>  
+  <%else%>
+    Enter a link to shorten it
+  <% end %>
+  </h4>
 
-<%if @message%>
-  <%= @message %>
-<% end %>
+</div>
+
